@@ -5,12 +5,11 @@ import 'package:resources_relationnelles_flutter/pages/ressources/liste_ressourc
 import 'package:resources_relationnelles_flutter/services/get_user.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_appbar.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_button.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:resources_relationnelles_flutter/services/secure_storage.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   dynamic getUser() async {
     return await fetchUtilisateurByToken();
@@ -20,7 +19,7 @@ class ProfilePage extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double containerHeight = screenHeight * 0.9; // 90% de la hauteur de l'écran
 
-    void logout() async {
+     void logout() async {
       await SessionManager().destroy();
       final SecureStorage storage = SecureStorage();
       await storage.delteSecureData('token');

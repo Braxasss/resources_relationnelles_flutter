@@ -1,27 +1,15 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:resources_relationnelles_flutter/classes/relation_type.dart';
-import 'package:resources_relationnelles_flutter/classes/ressource.dart';
-import 'package:resources_relationnelles_flutter/classes/ressource_categorie.dart';
-import 'package:resources_relationnelles_flutter/classes/utilisateur.dart';
 import 'package:resources_relationnelles_flutter/services/ressource_services.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_button.dart';
-import 'package:resources_relationnelles_flutter/widgets/relations_type_select.dart';
 import 'package:resources_relationnelles_flutter/widgets/text_input.dart';
-import 'package:resources_relationnelles_flutter/widgets/text_area.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_appbar.dart';
 
-import '../../classes/ressource_type.dart';
 
 
-import '../../widgets/ressource_categorie_select.dart';
-import '../../widgets/ressource_type_select.dart';
 
 class AdminPanelPage extends StatefulWidget {
-  const AdminPanelPage({Key? key}) : super(key: key);
+  const AdminPanelPage({super.key});
 
   @override
   _AdminPanelPageState createState() => _AdminPanelPageState();

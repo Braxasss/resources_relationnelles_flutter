@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -101,7 +100,7 @@ class _ListerFavoriesPageState extends State<ListerFavoriesPage> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    margin: EdgeInsets.all(12),
+                    margin: const EdgeInsets.all(12),
                     child: ListTile(
                     leading: Image.network('http://82.66.110.4:8000/${snapshot.data![index].ressource.fileUrl!}'),
                     title: Text(snapshot.data![index].ressource.titre),

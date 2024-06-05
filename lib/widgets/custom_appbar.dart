@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:resources_relationnelles_flutter/classes/utilisateur.dart';
 import 'package:resources_relationnelles_flutter/pages/admin/admin_panel.dart';
 import 'package:resources_relationnelles_flutter/pages/favorite/liste_favorites.dart';
 import 'package:resources_relationnelles_flutter/pages/moderation/panel_moderation.dart';
@@ -13,9 +12,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Text? title;
 
   const CustomAppBar({
-    Key? key,
+    super.key,
     this.title,
-  }) : super(key: key);
+  });
 
   dynamic getUser() async {
     return await fetchUtilisateurByToken();
@@ -57,7 +56,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           // Naviguer vers la page "profil"
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => PanelModeration()),
+                            MaterialPageRoute(builder: (context) => const PanelModeration()),
                           );
                         }
                 ),
