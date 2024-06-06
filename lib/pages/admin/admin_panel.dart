@@ -1,5 +1,9 @@
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:resources_relationnelles_flutter/classes/stats.dart';
 import 'package:resources_relationnelles_flutter/services/ressource_services.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_button.dart';
 import 'package:resources_relationnelles_flutter/widgets/text_input.dart';
@@ -71,7 +75,25 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
       ),
       );
     }
+    
   }
+  Future<Stats> fetchRessources() async {
+  String? cle = dotenv.env['API_KEY'];
+  String? apiurl = dotenv.env['API_URL'];
+  final response = await http.get(
+    Uri.parse('$apiurl/api/ressources/count/'),
+    headers: {
+      'X-API-Key': '$cle',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+    return Stats.fromJson(jsonResponse);
+  } else {
+    throw Exception('Failed to load ressource');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
