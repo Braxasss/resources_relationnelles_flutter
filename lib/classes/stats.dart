@@ -1,23 +1,39 @@
-
 class Stats {
   final int countAllRessource;
-  final List<Map<String, dynamic>> ressourceByCategories;
+  final List<RessourceByCategory> ressourceByCategories;
   final Map<String, int> ressourceByDays;
-  final List<dynamic> commentByDays;
 
   Stats({
     required this.countAllRessource,
     required this.ressourceByCategories,
     required this.ressourceByDays,
-    required this.commentByDays,
   });
 
   factory Stats.fromJson(Map<String, dynamic> json) {
+    var list = json['ressourceByCategories'] as List;
+    List<RessourceByCategory> categoriesList = list.map((i) => RessourceByCategory.fromJson(i)).toList();
+
     return Stats(
       countAllRessource: json['countAllRessource'],
-      ressourceByCategories: List<Map<String, dynamic>>.from(json['ressourceByCategories']),
+      ressourceByCategories: categoriesList,
       ressourceByDays: Map<String, int>.from(json['ressourceByDays']),
-      commentByDays: json['commentByDays'] ?? [],
+    );
+  }
+}
+
+class RessourceByCategory {
+  final String categoryName;
+  final int ressourceCount;
+
+  RessourceByCategory({
+    required this.categoryName,
+    required this.ressourceCount,
+  });
+
+  factory RessourceByCategory.fromJson(Map<String, dynamic> json) {
+    return RessourceByCategory(
+      categoryName: json['category_name'],
+      ressourceCount: json['ressource_count'],
     );
   }
 }

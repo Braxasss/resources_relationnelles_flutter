@@ -16,101 +16,71 @@ class StatsWidget extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
-        } else {
+        } else if (snapshot.hasData) {
           return _buildStatsUI(snapshot.data!);
+        } else {
+          return const Center(child: Text('No data available'));
         }
       },
     );
   }
 
   Widget _buildStatsUI(Stats stats) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Expanded(
-            child: Row(
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
               children: [
-                Expanded(child: _buildPieChart('Type de Ressources')),
-                Expanded(child: _buildBarChart('Posts de la semaine')),
+                Flexible(child: _buildPieChart('Type de Ressources', stats)),
+                Flexible(child: _buildBarChart('Posts soumis les 5 derniers jours', stats)),
               ],
             ),
-          ),
-          const Expanded(
-            child: Row(
+            const SizedBox(height: 20),
+            Row(
               children: [
-                Expanded(
+                Flexible(
                   child: Center(
                     child: Text(
                       'Postes par jour',
-                      style: TextStyle(
-                        fontSize: 18, // Change the font size
-                        fontWeight: FontWeight.bold, // Make the text bold
-                        color: Color(0xFF45B39D), // Change the text color
-                        // Add more text styles as needed
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'Posts sur 5 jours',
-                      style: TextStyle(
-                        fontSize: 18, // Change the font size
-                        fontWeight: FontWeight.bold, // Make the text bold
-                        color: Color(0xFF45B39D), // Change the text color
-                        // Add more text styles as needed
-                      ),
+                      style: _textStyle(),
                     ),
                   ),
                 ),
               ],
             ),
-          ),
-          const Expanded(
-            child: Row(
-              children: [
-                Expanded(child: Center(child: Text('Postes par jour'))),
-                Expanded(child: Center(child: Text('Posts sur 5 jours'))),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildPieChart(String title) {
+  TextStyle _textStyle() {
+    return const TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      color: Color(0xFF45B39D),
+    );
+  }
+
+  Widget _buildPieChart(String title, Stats stats) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Text(title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        Expanded(
+        Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        SizedBox(
+          height: 200, // Set a fixed height for the chart
           child: PieChart(
             PieChartData(
-              sections: [
-                PieChartSectionData(
-                  value: 40,
-                  color: const Color(0xFF45B39D),
-                  title: '40%',
-                ),
-                PieChartSectionData(
-                  value: 30,
-                  color: const Color(0xff73c6b6),
-                  title: '30%',
-                ),
-                PieChartSectionData(
-                  value: 20,
-                  color: const Color(0xff7dcea0),
-                  title: '20%',
-                ),
-                PieChartSectionData(
-                  value: 10,
-                  color: const Color(0xfff8c471),
-                  title: '10%',
-                ),
-              ],
+              sections: stats.ressourceByCategories.map((category) {
+                return PieChartSectionData(
+                  value: category.ressourceCount.toDouble(),
+                  color: Colors.primaries[category.categoryName.hashCode % Colors.primaries.length],
+                  title: '${category.ressourceCount}',
+                );
+              }).toList(),
             ),
           ),
         ),
@@ -118,22 +88,22 @@ class StatsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildBarChart(String title) {
+  Widget _buildBarChart(String title, Stats stats) {
+    List<String> days = stats.ressourceByDays.keys.toList();
+    List<int> values = stats.ressourceByDays.values.toList();
+
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Text(title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        Expanded(
+        Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        SizedBox(
+          height: 200, // Set a fixed height for the chart
           child: BarChart(
             BarChartData(
               alignment: BarChartAlignment.spaceAround,
-              barGroups: [
-                _buildBarChartGroupData(0, 5, const Color(0xFF45B39D)),
-                _buildBarChartGroupData(1, 6, const Color(0xff73c6b6)),
-                _buildBarChartGroupData(2, 8, const Color(0xff7dcea0)),
-                _buildBarChartGroupData(3, 3, const Color(0xfff8c471)),
-                _buildBarChartGroupData(4, 70, const Color(0xffdaf7a6)),
-              ],
+              barGroups: List.generate(days.length, (index) {
+                return _buildBarChartGroupData(index, values[index].toDouble());
+              }),
               titlesData: FlTitlesData(
                 show: true,
                 bottomTitles: AxisTitles(
@@ -145,31 +115,10 @@ class StatsWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       );
-                      Widget text;
-                      switch (value.toInt()) {
-                        case 0:
-                          text = const Text('Lun', style: style);
-                          break;
-                        case 1:
-                          text = const Text('Mar', style: style);
-                          break;
-                        case 2:
-                          text = const Text('Mer', style: style);
-                          break;
-                        case 3:
-                          text = const Text('Jeu', style: style);
-                          break;
-                        case 4:
-                          text = const Text('Ven', style: style);
-                          break;
-                        default:
-                          text = const Text('', style: style);
-                          break;
-                      }
                       return SideTitleWidget(
                         axisSide: meta.axisSide,
                         space: 16, // margin top
-                        child: text,
+                        child: Text(days[value.toInt()].split('-').last, style: style),
                       );
                     },
                   ),
@@ -186,12 +135,8 @@ class StatsWidget extends StatelessWidget {
                       String text;
                       if (value == 0) {
                         text = '0';
-                      } else if (value == 5) {
-                        text = '5';
-                      } else if (value == 10) {
-                        text = '10';
                       } else {
-                        text = '';
+                        text = value.toInt().toString();
                       }
                       return Text(text, style: style);
                     },
@@ -207,13 +152,13 @@ class StatsWidget extends StatelessWidget {
     );
   }
 
-  BarChartGroupData _buildBarChartGroupData(int x, double y, Color color) {
+  BarChartGroupData _buildBarChartGroupData(int x, double y) {
     return BarChartGroupData(
       x: x,
       barRods: [
         BarChartRodData(
           toY: y,
-          color: color,
+          color: Colors.primaries[x % Colors.primaries.length],
           width: 22,
           borderRadius: const BorderRadius.all(Radius.zero),
         ),

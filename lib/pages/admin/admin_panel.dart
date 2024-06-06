@@ -6,11 +6,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:resources_relationnelles_flutter/classes/stats.dart';
 import 'package:resources_relationnelles_flutter/services/ressource_services.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_button.dart';
+import 'package:resources_relationnelles_flutter/widgets/custom_sidebar.dart';
 import 'package:resources_relationnelles_flutter/widgets/text_input.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_appbar.dart';
-
-
-
 
 class AdminPanelPage extends StatefulWidget {
   const AdminPanelPage({super.key});
@@ -99,43 +97,41 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
-          title: Text("Panneau d'administration"),
+        title: Text("Panneau d'administration"),
       ),
+      drawer: const CustomSidebar(),
       backgroundColor: const Color(0xFF03989E),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CustomTextInput(controller: _relationController, labelText: 'Type de relation', maxLines: 1, maxLength: 50),
-                    CustomButton(text: 'Ajouter', onPressed: _validateAndSubmitRelation),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CustomTextInput(controller: _categorieController, labelText: 'Catégorie de ressource', maxLines: 2, maxLength: 200),
-                    CustomButton(text: 'Ajouter', onPressed: _validateAndSubmitCategorie),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CustomTextInput(controller: _typeController, labelText: 'Type de ressource', maxLines: 5, maxLength: 1000),
-                    CustomButton(text: 'Ajouter', onPressed: _validateAndSubmitType),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                // Boutons d'annulation et de validation,
-              ],
-            ),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CustomTextInput(controller: _relationController, labelText: 'Type de relation', maxLines: 1, maxLength: 50),
+                  CustomButton(text: 'Ajouter', onPressed: _validateAndSubmitRelation),
+                ],
+              ),
+              const SizedBox(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CustomTextInput(controller: _categorieController, labelText: 'Catégorie de ressource', maxLines: 2, maxLength: 200),
+                  CustomButton(text: 'Ajouter', onPressed: _validateAndSubmitCategorie),
+                ],
+              ),
+              const SizedBox(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CustomTextInput(controller: _typeController, labelText: 'Type de ressource', maxLines: 5, maxLength: 1000),
+                  CustomButton(text: 'Ajouter', onPressed: _validateAndSubmitType),
+                ],
+              ),
+              const SizedBox(),
+            ],
           ),
         ),
       ),

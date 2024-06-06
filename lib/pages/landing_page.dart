@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:resources_relationnelles_flutter/pages/ressources/liste_ressources.dart';
+import 'package:resources_relationnelles_flutter/services/get_user.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_appbar.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_sidebar.dart';
 
 void main() {
   runApp(const ResourcesRelationellesApp());
 }
+
+dynamic getUser() async {
+    return await fetchUtilisateurByToken();
+  }
 
 class ResourcesRelationellesApp extends StatelessWidget {
   const ResourcesRelationellesApp({super.key});
@@ -38,10 +44,10 @@ class LandingPage extends StatelessWidget {
           children: [
             HeroSection(),
             FeaturesSection(),
-            Footer(),
           ],
         ),
       ),
+      bottomNavigationBar: Footer(),
     );
   }
 }
@@ -79,7 +85,10 @@ class HeroSection extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ListerRessourcesPage()),
+                          );},
             child: const Text('Démarrez maintenant'),
           ),
         ],
@@ -106,33 +115,29 @@ class FeaturesSection extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            Center(
-              child: FeatureItem(
-                icon: Icons.chat_bubble_outline,
-                title: 'Interactions sur les posts',
-                description: 'Entretenez des conversations riches avec nos membres.',
-              ),
+            FeatureItem(
+              icon: Icons.chat_bubble_outline,
+              title: 'Interactions sur les posts',
+              description:
+                  'Entretenez des conversations riches avec nos membres.',
             ),
-            Center(
-              child: FeatureItem(
-                icon: Icons.library_books_outlined,
-                title: 'Ressources nombreuses',
-                description: 'Accédez à une vaste quantité de ressources mise à jour.',
-              ),
+            FeatureItem(
+              icon: Icons.library_books_outlined,
+              title: 'Ressources nombreuses',
+              description:
+                  'Accédez à une vaste quantité de ressources mise à jour.',
             ),
-            Center(
-              child: FeatureItem(
-                icon: Icons.people_outline,
-                title: 'Modération active',
-                description: 'Profitez d\'une modération active pour une expérience sécurisée.',
-              ),
+            FeatureItem(
+              icon: Icons.people_outline,
+              title: 'Modération active',
+              description:
+                  'Profitez d\'une modération active pour une expérience sécurisée.',
             ),
-            Center(
-              child: FeatureItem(
-                icon: Icons.archive_outlined,
-                title: 'Archives fournies',
-                description: 'Consultez des archives riches et variées pour vos recherches.',
-              ),
+            FeatureItem(
+              icon: Icons.archive_outlined,
+              title: 'Archives fournies',
+              description:
+                  'Consultez des archives riches et variées pour vos recherches.',
             ),
           ],
         ),
@@ -146,7 +151,11 @@ class FeatureItem extends StatelessWidget {
   final String title;
   final String description;
 
-  const FeatureItem({super.key, required this.icon, required this.title, required this.description});
+  const FeatureItem(
+      {super.key,
+      required this.icon,
+      required this.title,
+      required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +171,8 @@ class FeatureItem extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 5),
                 Text(
@@ -187,6 +197,7 @@ class Footer extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 60),
       color: const Color(0xFF45B39D),
       child: Column(
+        mainAxisSize: MainAxisSize.min, // Ensure the column takes minimum space needed
         children: [
           const Text(
             'Resources Relationelles',
