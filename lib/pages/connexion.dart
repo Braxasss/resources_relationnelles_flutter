@@ -16,11 +16,11 @@ import 'package:resources_relationnelles_flutter/widgets/custom_appbar.dart';
 import '../services/get_user.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const Login());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Login extends StatelessWidget {
+  const Login({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -4,6 +4,7 @@ import 'package:resources_relationnelles_flutter/pages/ressources/liste_ressourc
 import 'package:resources_relationnelles_flutter/services/get_user.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_appbar.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_sidebar.dart';
+import 'dart:html' as html;
 
 void main() {
   runApp(const ResourcesRelationellesApp());
@@ -215,17 +216,17 @@ class Footer extends StatelessWidget {
               IconButton(
                 icon: const FaIcon(FontAwesomeIcons.facebook),
                 color: const Color.fromARGB(255, 0, 49, 112),
-                onPressed: () {},
+                onPressed: () {html.window.open("https://www.facebook.com/gouvernement.fr/?locale=fr_FR","new tab");},
               ),
               IconButton(
                 icon: const FaIcon(FontAwesomeIcons.twitter),
                 color: const Color.fromARGB(255, 40, 194, 255),
-                onPressed: () {},
+                onPressed: () {html.window.open("https://x.com/gouvernementfr?lang=en","new tab");},
               ),
               IconButton(
                 icon: const FaIcon(FontAwesomeIcons.linkedin),
                 color: const Color.fromARGB(255, 0, 132, 219),
-                onPressed: () {},
+                onPressed: () {html.window.open("https://www.linkedin.com/company/gouvernementfr/","new tab");},
               ),
             ],
           ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/ressources/liste_ressources.dart';
+import 'package:resources_relationnelles_flutter/pages/landing_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future main() async {
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0x96008F77)),
         useMaterial3: true,
       ),
-      home: const ListerRessourcesPage(),
+      home: const LandingPage(),
       debugShowCheckedModeBanner: false,
       
     );
@@ -37,7 +37,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const ListerRessourcesPage();
+    return const LandingPage();
   }
 }
 

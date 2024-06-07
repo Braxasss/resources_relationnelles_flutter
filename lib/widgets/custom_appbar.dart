@@ -43,7 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 IconButton(
                   icon: const Icon(Icons.query_stats),
                   onPressed:  () {
-                          // Naviguer vers la page "profil"
+                          // Naviguer vers la page "Stats"
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const AdminStats()),
@@ -54,7 +54,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 IconButton(
                   icon: const Icon(Icons.admin_panel_settings),
                   onPressed:  () {
-                          // Naviguer vers la page "profil"
+                          // Naviguer vers la page "AdminPanelPage"
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const AdminPanelPage()),
