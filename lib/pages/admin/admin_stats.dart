@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:resources_relationnelles_flutter/classes/stats.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_appbar.dart';
 import 'package:resources_relationnelles_flutter/widgets/custom_sidebar.dart';
+import 'package:resources_relationnelles_flutter/widgets/export_stats.dart';
 import 'package:resources_relationnelles_flutter/widgets/stats_widget.dart';
 
 Future<Stats> fetchStats() async {
@@ -26,7 +27,6 @@ Future<Stats> fetchStats() async {
   }
 }
 
-
 class AdminStats extends StatelessWidget {
   const AdminStats({super.key});
 
@@ -37,7 +37,21 @@ class AdminStats extends StatelessWidget {
         title: Text('Admin Stats'),
       ),
       drawer: const CustomSidebar(),
-      body: StatsWidget(statsFuture: fetchStats()),
+      body: Column(
+        children: [
+          Expanded(
+            child: StatsWidget(statsFuture: fetchStats()),
+          ),
+          Container(
+            color: const Color(0xff45b39d),
+            height: 50,
+            child: ExportStats(statsFuture: fetchStats()),
+          ),
+        ],
+      ),
     );
   }
 }
+
+
+

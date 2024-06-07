@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:resources_relationnelles_flutter/classes/stats.dart';
 
+
 class StatsWidget extends StatelessWidget {
   final Future<Stats> statsFuture;
 
@@ -34,21 +35,8 @@ class StatsWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Flexible(child: _buildPieChart('Type de Ressources', stats)),
+                Flexible(child: _buildPieChart('Type de Ressources les plus postées', stats)),
                 Flexible(child: _buildBarChart('Posts soumis les 5 derniers jours', stats)),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Flexible(
-                  child: Center(
-                    child: Text(
-                      'Postes par jour',
-                      style: _textStyle(),
-                    ),
-                  ),
-                ),
               ],
             ),
           ],
@@ -57,112 +45,114 @@ class StatsWidget extends StatelessWidget {
     );
   }
 
-  TextStyle _textStyle() {
-    return const TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.bold,
-      color: Color(0xFF45B39D),
-    );
-  }
-
-  Widget _buildPieChart(String title, Stats stats) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        SizedBox(
-          height: 200, // Set a fixed height for the chart
-          child: PieChart(
-            PieChartData(
-              sections: stats.ressourceByCategories.map((category) {
-                return PieChartSectionData(
-                  value: category.ressourceCount.toDouble(),
-                  color: Colors.primaries[category.categoryName.hashCode % Colors.primaries.length],
-                  title: '${category.ressourceCount}',
-                );
-              }).toList(),
-            ),
+Widget _buildPieChart(String title, Stats stats) {
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      SizedBox(
+        height: 300, // Set a fixed height for the chart
+        child: PieChart(
+          PieChartData(
+            sections: stats.ressourceByCategories.asMap().entries.map((entry) {
+              final index = entry.key;
+              final category = entry.value;
+              return PieChartSectionData(
+                value: category.ressourceCount.toDouble(),
+                color: getColorByIndex(index),
+                title: '${category.categoryName}\n${category.ressourceCount}', // Include category name and count
+                radius: 80, // Adjust the radius of the pie chart sections
+                titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 0, 0, 0)), // Customize title style
+              );
+            }).toList(),
           ),
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
 
-  Widget _buildBarChart(String title, Stats stats) {
-    List<String> days = stats.ressourceByDays.keys.toList();
-    List<int> values = stats.ressourceByDays.values.toList();
+Color getColorByIndex(int index) {
+  final List<Color> colors = [const Color(0xfff8c471), const Color(0xff45b39d), const Color(0xff73c6b6), const Color(0xff7dcea0), const Color(0xffdaf7a6)]; // Define your color sequence
+  return colors[index % colors.length]; // Use modulo to cycle through the colors
+}
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        SizedBox(
-          height: 200, // Set a fixed height for the chart
-          child: BarChart(
-            BarChartData(
-              alignment: BarChartAlignment.spaceAround,
-              barGroups: List.generate(days.length, (index) {
-                return _buildBarChartGroupData(index, values[index].toDouble());
-              }),
-              titlesData: FlTitlesData(
-                show: true,
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (double value, TitleMeta meta) {
-                      const style = TextStyle(
-                        color: Color(0xff7589a2),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      );
-                      return SideTitleWidget(
-                        axisSide: meta.axisSide,
-                        space: 16, // margin top
-                        child: Text(days[value.toInt()].split('-').last, style: style),
-                      );
-                    },
-                  ),
+
+Widget _buildBarChart(String title, Stats stats) {
+  List<String> days = stats.ressourceByDays.keys.toList();
+  List<int> values = stats.ressourceByDays.values.toList();
+
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      SizedBox(
+        height: 200, // Set a fixed height for the chart
+        child: BarChart(
+          BarChartData(
+            alignment: BarChartAlignment.spaceAround,
+            barGroups: List.generate(days.length, (index) {
+              return _buildBarChartGroupData(index, values[index].toDouble(), getColorByIndex(index));
+            }),
+            titlesData: FlTitlesData(
+              show: true,
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (double value, TitleMeta meta) {
+                    const style = TextStyle(
+                      color: Color(0xff7589a2),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    );
+                    return SideTitleWidget(
+                      axisSide: meta.axisSide,
+                      space: 16, // margin top
+                      child: Text(days[value.toInt()].split('-').last, style: style),
+                    );
+                  },
                 ),
-                leftTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (double value, TitleMeta meta) {
-                      const style = TextStyle(
-                        color: Color(0xff7589a2),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      );
-                      String text;
-                      if (value == 0) {
-                        text = '0';
-                      } else {
-                        text = value.toInt().toString();
-                      }
-                      return Text(text, style: style);
-                    },
-                    reservedSize: 28,
-                    interval: 1,
-                  ),
+              ),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (double value, TitleMeta meta) {
+                    const style = TextStyle(
+                      color: Color(0xff7589a2),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    );
+                    String text;
+                    if (value == 0) {
+                      text = '0';
+                    } else {
+                      text = value.toInt().toString();
+                    }
+                    return Text(text, style: style);
+                  },
+                  reservedSize: 28,
+                  interval: 1,
                 ),
               ),
             ),
           ),
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
 
-  BarChartGroupData _buildBarChartGroupData(int x, double y) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: y,
-          color: Colors.primaries[x % Colors.primaries.length],
-          width: 22,
-          borderRadius: const BorderRadius.all(Radius.zero),
-        ),
-      ],
-    );
-  }
+BarChartGroupData _buildBarChartGroupData(int x, double y, Color barColor) {
+  return BarChartGroupData(
+    x: x,
+    barRods: [
+      BarChartRodData(
+        toY: y,
+        color: barColor,
+        width: 22,
+        borderRadius: const BorderRadius.all(Radius.zero),
+      ),
+    ],
+  );
+}
 }

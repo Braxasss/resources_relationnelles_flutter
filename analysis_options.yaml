@@ -10,6 +10,7 @@
 analyzer:
   errors:
     avoid_print: ignore
+    avoid_web_libraries_in_flutter: ignore
     library_private_types_in_public_api: ignore
     unused_field: ignore
     unused_local_variable: ignore
