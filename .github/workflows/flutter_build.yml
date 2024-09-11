@@ -31,4 +31,4 @@ jobs:
 
       - name: Deploy application via SSH
         run: |
-          ssh romain@82.66.110.4 'touch helloworld'
+          scp romain@82.66.110.4:/var/www/flutter_web ${GITHUB_REPOSITORY}/build/web/
