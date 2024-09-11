@@ -22,6 +22,14 @@ jobs:
           # Ajoute le serveur distant à la liste des hôtes connus
           ssh-keyscan -H 82.66.110.4 >> ~/.ssh/known_hosts
 
+      - name: Build Flutter web
+        uses: subosito/flutter-action@v2.16.0
+        with:
+          flutter-version: 3.22.0
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build web
+
       - name: Deploy application via SSH
         run: |
           ssh romain@82.66.110.4 'touch helloworld'
