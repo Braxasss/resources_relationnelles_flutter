@@ -31,6 +31,6 @@ jobs:
       - run: flutter build web --release
 
       - name: Deploy application via SSH
-      - run: | 
+        run: | 
           cd build/web
           scp -r . romain@82.66.110.4:/var/www/flutter_web
