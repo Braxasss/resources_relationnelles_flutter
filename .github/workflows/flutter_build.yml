@@ -32,4 +32,4 @@ jobs:
 
       - name: Deploy application via SSH
         run: | 
-          scp -r build/web/ romain@82.66.110.4:/var/www/flutter_web
+          scp -r build/web/* romain@82.66.110.4:/var/www/flutter_web
