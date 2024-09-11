@@ -50,13 +50,13 @@ void createExcelFile(Stats stats) async {
   var sheet = excel['Sheet1'];
 
   // Append headers for ressourceByCategories
-  sheet.appendRow([const TextCellValue("Type de Catégorie"), const TextCellValue("Ressources de ce type")]);
+  sheet.appendRow([TextCellValue("Type de Catégorie"), TextCellValue("Ressources de ce type")]);
   for (var item in stats.ressourceByCategories) {
     sheet.appendRow([TextCellValue(item.categoryName), IntCellValue(item.ressourceCount)]);
   }
 
   // Append headers for ressourceByDays
-  sheet.appendRow([const TextCellValue("Date de soumission"), const TextCellValue("Nombre de ressources Postées")]);
+  sheet.appendRow([TextCellValue("Date de soumission"), TextCellValue("Nombre de ressources Postées")]);
   stats.ressourceByDays.forEach((date, count) {
     sheet.appendRow([TextCellValue(date), IntCellValue(count)]);
   });
